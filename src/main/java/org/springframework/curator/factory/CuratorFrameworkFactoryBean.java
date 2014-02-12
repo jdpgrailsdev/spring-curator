@@ -78,14 +78,6 @@ public class CuratorFrameworkFactoryBean implements FactoryBean<CuratorFramework
     private ThreadFactory threadFactory;
     private ZookeeperFactory zookeeperFactory;
 
-
-//    builder.addPropertyValue("retryPolicyType", retryPolicyTypeElement.getLocalName());
-//    builder.addPropertyValue("retryPolicyMaxRetries", Integer.parseInt(retryPolicyTypeElement.getAttribute("max-retries")));
-//    builder.addPropertyValue("retryPolicyBaseSleepTime", Integer.parseInt(retryPolicyTypeElement.getAttribute("base-sleep-time")));
-//    builder.addPropertyValue("retryPolicyMaxSleepTime", Integer.parseInt(retryPolicyTypeElement.getAttribute("max-sleep-time")));
-//    builder.addPropertyValue("retryPolicySleepBetweenRetries", Integer.parseInt(retryPolicyTypeElement.getAttribute("sleep-between-retries")));
-//    builder.addPropertyValue("retryPolicyMaxElapsedTime", Integer.parseInt(retryPolicyTypeElement.getAttribute("max-elapsed-time")))
-
     @Override
     public void destroy() throws Exception {
         try {

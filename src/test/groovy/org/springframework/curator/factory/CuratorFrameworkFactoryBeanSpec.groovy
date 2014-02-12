@@ -85,6 +85,17 @@ class CuratorFrameworkFactoryBeanSpec extends Specification {
             notThrown Exception
     }
 
+    def "test attempting to destroy the client when the client when an exception occurs"() {
+        setup:
+            factory.client = Mock(CuratorFramework) {
+                close() >> { throw new NullPointerException('test') }
+            }
+        when:
+            factory.destroy()
+        then:
+            notThrown Exception
+    }
+
     def "test attemptiong to validate the client when the client is null"() {
         when:
             factory.validateClient()
