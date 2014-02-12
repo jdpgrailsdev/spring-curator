@@ -5,9 +5,9 @@
 *.war
 *.ear
 /target
-
+/build
+/bin
+.gradle/
+.settings/
 .classpath
-
 .project
-
-.settings/org.eclipse.m2e.core.prefs

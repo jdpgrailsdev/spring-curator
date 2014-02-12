@@ -1,0 +1,59 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'cobertura'
+
+group = 'org.springframework.curator'
+version = '1.0.0-SNAPSHOT'
+
+description = """spring-curator"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+ext {
+    curatorVersion = '2.3.0'
+    groovyVersion= '2.2.1'
+    springVersion = '4.0.1.RELEASE'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.saliman:gradle-cobertura-plugin:2.2.3"
+    }
+}
+
+repositories {
+     mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.curator', name: 'curator-client', version:curatorVersion
+    compile group: 'org.apache.curator', name: 'curator-framework', version:curatorVersion
+    compile group: 'org.springframework', name: 'spring-beans', version:springVersion
+    compile group: 'org.springframework', name: 'spring-core', version:springVersion
+    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.6'
+    testCompile group: 'cglib', name: 'cglib', version:'2.2.2'
+    testCompile group: 'junit', name: 'junit-dep', version:'4.11'
+    testCompile group: 'org.spockframework', name: 'spock-core', version:'0.7-groovy-2.0'
+    testCompile group: 'org.objenesis', name: 'objenesis', version:'1.2'
+    testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version:groovyVersion
+    testCompile group: 'org.apache.curator', name: 'curator-test', version:curatorVersion
+    testCompile group: 'org.springframework', name: 'spring-test', version:springVersion
+}
+
+test {
+    filter {
+        includeTestsMatching "*Test"
+        includeTestsMatching "*Spec"
+    }
+}
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+    coverageIgnoreTrivial = true
+    coverageIgnores = ['org.slf4j.Logger.*']
+}

@@ -1,4 +1,3 @@
 * Support custom retry policies
 * Add integration test using real spring applicationContext.xml
-* Convert to Gradle project
 * Finish README/documentation
