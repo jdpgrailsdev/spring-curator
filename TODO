@@ -2,4 +2,3 @@
 * Add integration test using real spring applicationContext.xml
 * Convert to Gradle project
 * Finish README/documentation
-* Add license
