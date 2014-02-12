@@ -1,0 +1,2 @@
+http\://www.springframework.org/schema/spring-curator.xsd=org/springframework/curator/config/spring-curator-1.0.xsd
+http\://www.springframework.org/schema/spring-curator-1.0.xsd=org/springframework/curator/config/spring-curator-1.0.xsd

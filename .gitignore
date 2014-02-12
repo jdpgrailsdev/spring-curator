@@ -4,3 +4,10 @@
 *.jar
 *.war
 *.ear
+/target
+
+.classpath
+
+.project
+
+.settings/org.eclipse.m2e.core.prefs

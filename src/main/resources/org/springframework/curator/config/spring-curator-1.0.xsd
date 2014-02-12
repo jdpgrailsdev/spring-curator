@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.springframework.org/schema/curator"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:tool="http://www.springframework.org/schema/tool"
+    targetNamespace="http://www.springframework.org/schema/curator"
+    elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans.xsd" />
+    <xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool.xsd" />
+
+    <xsd:annotation>
+        <xsd:documentation><![CDATA[
+    Spring Curator, version 1.0.0
+    Authors: Jonathan Pearlin
+
+    This defines a simple and consistent way of creating Apache
+    Curator clients to be used to connect to Apache ZooKeeper
+    instances.
+        ]]></xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="client">
+        <xsd:annotation>
+            <xsd:documentation source="java: org.springframework.curator.factory.CuratorFrameworkFactoryBean"/>
+            <xsd:appinfo>
+                <tool:assignable-to type="org.apache.curator.framework.CuratorFramework"/>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence maxOccurs="1" minOccurs="0">
+                <xsd:element name="authorization" type="authorization-type" minOccurs="0" maxOccurs="1">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            <![CDATA[The authorization data used to connect to ZooKeeper.]]>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="retry-policy" type="retry-policy-type" minOccurs="0" maxOccurs="1">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            <![CDATA[The retry policy that will be used when an attempt to connect to ZooKeeper is unsuccessful.]]>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="acl-provider-ref" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Reference to an org.apache.curator.framework.api.ACLProvider implementation as a Spring bean.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="compression-provider-ref" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Reference to an org.apache.curator.framework.api.CompressionProvider implementation as a Spring bean.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="connection-string" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The list of servers to connect to. IMPORTANT: use either this or ensemble-provider but not both.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="connection-timeout" type="xsd:decimal">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The connection timeout in milliseconds.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="default-data" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The data to use when PathAndBytesable.forPath(String) is used. This is useful for debugging purposes. For example, you could set this to be the IP of the client.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="ensemble-provider-ref" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Reference to an org.apache.curator.ensemble.EnsembleProvider implementation as a Spring bean.  IMPORTANT: use either this or connection-string but not both.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="namespace" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The pre-defined namespace that will be pre-pended to all paths when interacting with ZooKeeper.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="read-only" type="xsd:boolean">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[If true, allow ZooKeeper client to enter read only mode in case of a network partition.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="session-timeout" type="xsd:decimal">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The session timeout in milliseconds.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="thread-factory-ref" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Reference to a java.util.concurrent.ThreadFactory instance as a Spring bean.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="zookeeper-factory-ref" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Reference to an org.apache.curator.utils.ZookeeperFactory implementation as a Spring bean.]]>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="authorization-type">
+        <xsd:attribute name="scheme" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <![CDATA[The authorization scheme.]]>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="credentials" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <![CDATA[The authorization credentials as a string (will be converted to bytes).]]>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="retry-policy-type">
+        <xsd:choice>
+            <xsd:element name="bounded-exponential-backoff" type="bounded-exponential-backoff-type" maxOccurs="1" minOccurs="0" />
+            <xsd:element name="exponential-backoff" type="exponential-backoff-type" maxOccurs="1" minOccurs="0" />
+            <xsd:element name="retry-n-times" type="retry-n-times-type" maxOccurs="1" minOccurs="0" />
+            <xsd:element name="retry-one-time" type="retry-one-time-type" maxOccurs="1" minOccurs="0" />
+            <xsd:element name="retry-until-elapsed" type="retry-until-elapsed-type" maxOccurs="1" minOccurs="0" />
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="bounded-exponential-backoff-type">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[Retry policy that retries a set number of times with an increasing (up to a maximum bound) sleep time between retries.]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="max-retries" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The maximum number of retries to attempt.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="base-sleep-time" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The initial amount of time to wait between retries in milliseconds.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="max-sleep-time" type="xsd:decimal">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The maximum amount of time to wait between retries in milliseconds.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="exponential-backoff-type">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[Retry policy that retries a set number of times with increasing sleep time between retries.]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="max-retries" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The maximum number of retries to attempt.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="base-sleep-time" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The base amount of time to sleep before attempting a retry in milliseconds.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="max-sleep-time" type="xsd:decimal">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The maximum amount of time to wait between retries in milliseconds.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="retry-n-times-type">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[Retry policy that retries a max number of times.]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="max-retries" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The maximum number of retries to attempt.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="sleep-between-retries" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The amount of time to wait between retries in milliseconds.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="retry-one-time-type">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[Retry policy that retries a max of one time.]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="sleep-between-retries" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The amount of time to wait between retries in milliseconds.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="retry-until-elapsed-type">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[A retry policy that retries until a given amount of time elapses.]]>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="max-elapsed-time" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The maximum amount of time that can elapse before giving up.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="sleep-between-retries" type="xsd:decimal" use="required">
+           <xsd:annotation>
+               <xsd:documentation>
+                   <![CDATA[The amount of time to wait between retries in milliseconds.]]>
+               </xsd:documentation>
+           </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:schema>
