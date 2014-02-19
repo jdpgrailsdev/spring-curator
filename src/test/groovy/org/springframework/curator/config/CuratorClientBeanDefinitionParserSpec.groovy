@@ -32,6 +32,7 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class CuratorClientBeanDefinitionParserSpec extends Specification {
 
@@ -203,6 +204,19 @@ class CuratorClientBeanDefinitionParserSpec extends Specification {
         then:
             definition != null
             definition.getPropertyValues().size() == 8
+    }
+
+    @Unroll
+    def "test normalizing a node name #name"() {
+		expect:
+		    parser.normalizeName(name) == normalizedName
+		where:
+		    name						| normalizedName
+		    'someName'					| 'someName'
+			'prefix:someName'			| 'someName'
+			'prefix:some:name'			| 'some:name'
+			''							| ''
+			null						| null
     }
 
     protected Element parseXml(xml) {

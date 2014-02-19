@@ -139,7 +139,8 @@ public class CuratorClientBeanDefinitionParser extends AbstractBeanDefinitionPar
     private String normalizeName(final String nodeName) {
         if(StringUtils.hasText(nodeName)) {
             if(nodeName.indexOf(':') != -1) {
-                return nodeName.split(":")[1];
+	            int index = nodeName.indexOf(':');
+                return nodeName.substring(index+1);
             }
         }
 
