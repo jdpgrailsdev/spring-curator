@@ -1,1 +1,1 @@
-http\://www.springframework.org/schema/curator=
+http\://www.springframework.org/schema/curator=org.springframework.curator.config.CuratorNamespaceHandler

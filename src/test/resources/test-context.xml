@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:curator="http://www.springframework.org/schema/curator"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/curator http://www.springframework.org/schema/spring-curator.xsd">
+
+    <curator:client id="curatorClient" connection-string="127.0.0.1:1234" connection-timeout="1000">
+        <curator:retry-policy>
+            <curator:retry-one-time sleep-between-retries="10" />
+        </curator:retry-policy>
+    </curator:client>
+</beans>

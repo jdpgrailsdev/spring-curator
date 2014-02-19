@@ -63,10 +63,10 @@ public class CuratorClientBeanDefinitionParser extends AbstractBeanDefinitionPar
 
         builder.addPropertyValue("canBeReadOnly", Boolean.valueOf(element.getAttribute("read-only")));
         builder.addPropertyValue("connectionString", element.getAttribute("connection-string"));
-        builder.addPropertyValue("connectionTimeout", Integer.valueOf(element.getAttribute("connection-timeout")));
+        builder.addPropertyValue("connectionTimeout", getSafeInteger(element.getAttribute("connection-timeout")));
         builder.addPropertyValue("defaultData", element.getAttribute("default-data"));
         builder.addPropertyValue("namespace", element.getAttribute("namespace"));
-        builder.addPropertyValue("sessionTimeout", Integer.valueOf(element.getAttribute("session-timeout")));
+        builder.addPropertyValue("sessionTimeout", getSafeInteger(element.getAttribute("session-timeout")));
         addAuthorization(builder, element);
         addRetryPolicy(builder, element);
     }
@@ -78,46 +78,71 @@ public class CuratorClientBeanDefinitionParser extends AbstractBeanDefinitionPar
     }
 
     private void addAuthorization(final BeanDefinitionBuilder builder, final Element element) {
-        final NodeList elements = element.getElementsByTagName("authorization");
-        if(elements.getLength() > 0) {
-            final Element authorizationElement = (Element) elements.item(0);
-            builder.addPropertyValue("auth", authorizationElement.getAttribute("credentials"));
-            builder.addPropertyValue("scheme", authorizationElement.getAttribute("scheme"));
+	    for (int i = 0; i < element.getChildNodes().getLength(); i++) {
+            if (element.getChildNodes().item(i) instanceof Element) {
+                final Element potentialAuthorizationElement = (Element) element.getChildNodes().item(i);
+
+                if (potentialAuthorizationElement.getNodeName().endsWith("authorization")) {
+                    builder.addPropertyValue("auth", potentialAuthorizationElement.getAttribute("credentials"));
+                    builder.addPropertyValue("scheme", potentialAuthorizationElement.getAttribute("scheme"));
+                 }
+             }
         }
     }
 
     private void addRetryPolicy(final BeanDefinitionBuilder builder, final Element element) {
-        final NodeList elements = element.getElementsByTagName("retry-policy");
-        if(elements.getLength() > 0) {
-            final Element retryPolicyElement = (Element) elements.item(0);
+        for (int i = 0; i < element.getChildNodes().getLength(); i++) {
+            if (element.getChildNodes().item(i) instanceof Element) {
+                final Element potentialRetryPolicyElement = (Element) element.getChildNodes().item(i);
 
-            for(int i=0; i<retryPolicyElement.getChildNodes().getLength(); i++) {
-                if (retryPolicyElement.getChildNodes().item(i) instanceof Element) {
-                    final Element retryPolicyChildElement = (Element) retryPolicyElement.getChildNodes().item(i);
+                if (potentialRetryPolicyElement.getNodeName().endsWith("retry-policy")) {
+                    for(int j=0; j<potentialRetryPolicyElement.getChildNodes().getLength(); j++) {
+                        if (potentialRetryPolicyElement.getChildNodes().item(j) instanceof Element) {
+                            final Element retryPolicyChildElement = (Element) potentialRetryPolicyElement.getChildNodes().item(j);
 
-                    builder.addPropertyValue("retryPolicyType", retryPolicyChildElement.getNodeName());
+                            builder.addPropertyValue("retryPolicyType", normalizeName(retryPolicyChildElement.getNodeName()));
 
-                    if(StringUtils.hasText(retryPolicyChildElement.getAttribute("max-retries"))) {
-                        builder.addPropertyValue("retryPolicyMaxRetries", Integer.parseInt(retryPolicyChildElement.getAttribute("max-retries")));
-                    }
+                            if(StringUtils.hasText(retryPolicyChildElement.getAttribute("max-retries"))) {
+                                builder.addPropertyValue("retryPolicyMaxRetries", Integer.parseInt(retryPolicyChildElement.getAttribute("max-retries")));
+                            }
 
-                    if(StringUtils.hasText(retryPolicyChildElement.getAttribute("base-sleep-time"))) {
-                        builder.addPropertyValue("retryPolicyBaseSleepTime", Integer.parseInt(retryPolicyChildElement.getAttribute("base-sleep-time")));
-                    }
+                            if(StringUtils.hasText(retryPolicyChildElement.getAttribute("base-sleep-time"))) {
+                                builder.addPropertyValue("retryPolicyBaseSleepTime", Integer.parseInt(retryPolicyChildElement.getAttribute("base-sleep-time")));
+                            }
 
-                    if(StringUtils.hasText(retryPolicyChildElement.getAttribute("max-sleep-time"))) {
-                        builder.addPropertyValue("retryPolicyMaxSleepTime", Integer.parseInt(retryPolicyChildElement.getAttribute("max-sleep-time")));
-                    }
+                            if(StringUtils.hasText(retryPolicyChildElement.getAttribute("max-sleep-time"))) {
+                                builder.addPropertyValue("retryPolicyMaxSleepTime", Integer.parseInt(retryPolicyChildElement.getAttribute("max-sleep-time")));
+                            }
 
-                    if(StringUtils.hasText(retryPolicyChildElement.getAttribute("sleep-between-retries"))) {
-                        builder.addPropertyValue("retryPolicySleepBetweenRetries", Integer.parseInt(retryPolicyChildElement.getAttribute("sleep-between-retries")));
-                    }
+                            if(StringUtils.hasText(retryPolicyChildElement.getAttribute("sleep-between-retries"))) {
+                                builder.addPropertyValue("retryPolicySleepBetweenRetries", Integer.parseInt(retryPolicyChildElement.getAttribute("sleep-between-retries")));
+                            }
 
-                    if(StringUtils.hasText(retryPolicyChildElement.getAttribute("max-elapsed-time"))) {
-                        builder.addPropertyValue("retryPolicyMaxElapsedTime", Integer.parseInt(retryPolicyChildElement.getAttribute("max-elapsed-time")));
+                            if(StringUtils.hasText(retryPolicyChildElement.getAttribute("max-elapsed-time"))) {
+                                builder.addPropertyValue("retryPolicyMaxElapsedTime", Integer.parseInt(retryPolicyChildElement.getAttribute("max-elapsed-time")));
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    private Integer getSafeInteger(final String value) {
+        if(StringUtils.hasText(value)) {
+            return Integer.valueOf(value);
+        }
+
+        return null;
+    }
+
+    private String normalizeName(final String nodeName) {
+        if(StringUtils.hasText(nodeName)) {
+            if(nodeName.indexOf(':') != -1) {
+                return nodeName.split(":")[1];
+            }
+        }
+
+        return nodeName;
     }
 }
