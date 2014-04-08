@@ -23,7 +23,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "net.saliman:gradle-cobertura-plugin:2.2.3"
+        classpath "net.saliman:gradle-cobertura-plugin:2.2.4"
     }
 }
 
@@ -61,3 +61,5 @@ cobertura {
     coverageIgnores = ['org.slf4j.Logger.*']
     coverageReportDir = new File("$buildDir/reports/cobertura")
 }
+
+test.finalizedBy(project.tasks.cobertura)
