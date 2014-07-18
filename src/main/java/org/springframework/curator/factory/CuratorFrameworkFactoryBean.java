@@ -190,7 +190,10 @@ public class CuratorFrameworkFactoryBean implements FactoryBean<CuratorFramework
     protected void validateClient() throws Exception {
         if(client != null) {
             client.start();
+            logger.trace("Waiting for curator to create a connection");
+            client.blockUntilConnected();
             client.checkExists().forPath("/");
+            logger.trace("Curator has successfully verified the client");
         } else {
             throw new IllegalStateException("Attempt to validate Curator client before creating the client.");
         }

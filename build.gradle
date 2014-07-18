@@ -12,7 +12,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 ext {
-    curatorVersion = '2.4.0'
+    curatorVersion = '2.6.0'
     groovyVersion= '2.2.1'
     spockVersion = '0.7-groovy-2.0'
     springVersion = '4.0.2.RELEASE'
