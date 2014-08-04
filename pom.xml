@@ -8,7 +8,7 @@
     <description>Spring module for creating connections to Apache ZooKeeper using the Apache Curator framework</description>
 
     <properties>
-        <curator.version>2.4.0</curator.version>
+        <curator.version>2.6.0</curator.version>
         <groovy.version>2.2.1</groovy.version>
         <java.source.version>1.7</java.source.version>
         <java.target.version>1.7</java.target.version>
